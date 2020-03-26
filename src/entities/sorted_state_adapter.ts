@@ -23,7 +23,11 @@ export function createSortedStateAdapter<T>(
     return addManyMutably([entity], state)
   }
 
-  function addManyMutably(newModels: T[], state: R): void {
+  function addManyMutably(newModels: T[] | Record<string, T>, state: R): void {
+    if (!Array.isArray(newModels)) {
+      newModels = Object.values(newModels)
+    }
+
     const models = newModels.filter(
       model => !(selectIdValue(model, selectId) in state.entities)
     )
@@ -33,7 +37,10 @@ export function createSortedStateAdapter<T>(
     }
   }
 
-  function setAllMutably(models: T[], state: R): void {
+  function setAllMutably(models: T[] | Record<string, T>, state: R): void {
+    if (!Array.isArray(models)) {
+      models = Object.values(models)
+    }
     state.entities = {}
     state.ids = []
 
@@ -74,9 +81,16 @@ export function createSortedStateAdapter<T>(
     return upsertManyMutably([entity], state)
   }
 
-  function upsertManyMutably(entities: T[], state: R): void {
+  function upsertManyMutably(
+    entities: T[] | Record<string, T>,
+    state: R
+  ): void {
     const added: T[] = []
     const updated: Update<T>[] = []
+
+    if (!Array.isArray(entities)) {
+      entities = Object.values(entities)
+    }
 
     for (const entity of entities) {
       const id = selectIdValue(entity, selectId)
