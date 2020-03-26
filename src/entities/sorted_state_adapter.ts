@@ -67,7 +67,14 @@ export function createSortedStateAdapter<T>(
     return newKey !== update.id
   }
 
-  function updateManyMutably(updates: Update<T>[], state: R): void {
+  function updateManyMutably(
+    updates: Update<T>[] | Record<string, Update<T>>,
+    state: R
+  ): void {
+    if (!Array.isArray(updates)) {
+      updates = Object.values(updates)
+    }
+
     const models: T[] = []
 
     updates.forEach(update => takeUpdatedModel(models, update, state))
