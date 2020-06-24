@@ -73,7 +73,12 @@
         "path": "dist/redux-toolkit.esm.js",
         "maxSize": "20kB"
       }
-    ]
+    ],
+    "ci": {
+      "trackBranches": [
+        "master"
+      ]
+    }
   },
   "dependencies": {
     "immer": "^7.0.3",
